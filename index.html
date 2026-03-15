@@ -48,8 +48,7 @@
     overflow-x: hidden;
   }
 
-  body::before {
-    content: '';
+  .bg-grid {
     position: fixed;
     inset: 0;
     background-image:
@@ -60,8 +59,7 @@
     z-index: 0;
   }
 
-  body::after {
-    content: '';
+  .bg-glow {
     position: fixed;
     top: -20%;
     left: 50%;
@@ -403,6 +401,8 @@
 </head>
 <body>
 
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
 <div class="scanline"></div>
 
 <div class="page">

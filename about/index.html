@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Mike22</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #050608;
+    --dark: #0a0c10;
+    --panel: #0f1117;
+    --border: #1e2330;
+    --accent: #00e5ff;
+    --accent-dim: rgba(0,229,255,0.08);
+    --accent-glow: rgba(0,229,255,0.25);
+    --text: #e8eaf0;
+    --muted: #4a5168;
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'DM Sans', sans-serif;
+  }
+
+  html, body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(0,229,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .scanline {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NAV */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeDown 0.6s ease forwards 0.1s;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav a:hover, nav a.active { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    padding: 80px 48px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.3s;
+  }
+
+  .page-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .page-label span { color: var(--accent); }
+
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .hero-title .accent { color: var(--accent); }
+
+  .hero-intro {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(232,234,240,0.65);
+    max-width: 600px;
+    line-height: 1.7;
+    border-left: 2px solid var(--accent);
+    padding-left: 24px;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px 100px;
+    width: 100%;
+  }
+
+  /* STORY SECTION */
+  .story-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-bottom: 100px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .story-left {
+    position: relative;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .story-number {
+    font-family: var(--display);
+    font-size: 180px;
+    color: rgba(0,229,255,0.04);
+    line-height: 1;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .story-heading {
+    font-family: var(--display);
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .story-heading .accent { color: var(--accent); }
+
+  .callsign-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    margin-top: 32px;
+    position: relative;
+  }
+
+  .callsign-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .callsign-text {
+    font-family: var(--display);
+    font-size: 42px;
+    color: var(--accent);
+    text-shadow: 0 0 30px var(--accent-glow);
+    letter-spacing: 0.05em;
+  }
+
+  .callsign-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  /* 22 facts */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .fact-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fact-num {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+
+  .fact-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Story text */
+  .story-right {
+    padding-top: 40px;
+  }
+
+  .story-text {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(232,234,240,0.7);
+    line-height: 1.9;
+  }
+
+  .story-text p {
+    margin-bottom: 20px;
+  }
+
+  .story-text p:last-child { margin-bottom: 0; }
+
+  .story-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .story-text .highlight {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* MISSION SECTION */
+  .mission-section {
+    border-top: 1px solid var(--border);
+    padding-top: 80px;
+    margin-bottom: 100px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.7s;
+  }
+
+  .mission-inner {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .mission-quote {
+    font-family: var(--display);
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .mission-quote .accent { color: var(--accent); }
+
+  .mission-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* TEAM SECTION */
+  .team-section {
+    border-top: 1px solid var(--border);
+    padding-top: 80px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.9s;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .team-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .team-card:hover { border-color: rgba(0,229,255,0.3); }
+
+  .team-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .team-card:hover::before { opacity: 1; }
+
+  .team-initials {
+    font-family: var(--display);
+    font-size: 48px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .team-name {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .team-role {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .team-bio {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(232,234,240,0.6);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  .bottombar {
+    margin-top: auto;
+    padding: 20px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bottom-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .bottom-right {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .bottom-right a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .bottom-right a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+    50% { opacity: 0.4; box-shadow: 0 0 4px var(--accent); }
+  }
+
+  @media (max-width: 768px) {
+    .topbar { padding: 20px 24px; }
+    nav { gap: 20px; }
+    .hero { padding: 48px 24px 40px; }
+    .content { padding: 0 24px 80px; }
+    .story-section { grid-template-columns: 1fr; gap: 48px; }
+    .story-number { display: none; }
+    .team-grid { grid-template-columns: 1fr; }
+    .facts-grid { grid-template-columns: 1fr; }
+    .bottombar { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="scanline"></div>
+
+<div class="page">
+
+  <header class="topbar">
+    <a href="/" class="logo">
+      <div class="logo-dot"></div>
+      MIKE22.COM
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about" class="active">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="page-label">MIKE22 — <span>OUR STORY</span></p>
+    <h1 class="hero-title">MORE THAN<br>A <span class="accent">NAME.</span></h1>
+    <p class="hero-intro">Mike22 is a Saudi-based platform where individuals and businesses can use our ready-made tools — or partner with us to turn ideas into real, working solutions that solve real problems, create value, and unlock new opportunities.</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STORY -->
+    <div class="story-section">
+      <div class="story-left">
+        <span class="story-number">22</span>
+        <span class="section-label">// The name</span>
+        <h2 class="story-heading">THE STORY<br>BEHIND <span class="accent">MIKE22</span></h2>
+
+        <div class="callsign-box">
+          <div class="callsign-label">✦ Airport Callsign</div>
+          <div class="callsign-text">MIKE 22</div>
+          <div class="callsign-sub">— Press the button. He always answered.</div>
+        </div>
+
+        <div class="facts-grid">
+          <div class="fact-item">
+            <span class="fact-num">22</span>
+            <span class="fact-text">House Number</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-num">22</span>
+            <span class="fact-text">Football Jersey</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-num">22</span>
+            <span class="fact-text">Work Extension</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-num">22</span>
+            <span class="fact-text">Car Plates</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-right">
+        <div class="story-text">
+          <p>The story behind Mike22 is <strong>deeply personal.</strong></p>
+          <p>Our father, who has passed away, had a lifelong connection with the number 22. It appeared throughout his life — his house number, his work number, his football jersey, and even by coincidence in many of his car plates.</p>
+          <p>He dedicated his life to aviation, working in airports and traveling the world. Throughout his entire career, his walkie-talkie call sign was <span class="highlight">"Mike22."</span></p>
+          <p>Whenever someone needed help, guidance, or support, they would call "Mike22" — and he would always respond. No matter where he was, at work or at home, he was always there to help.</p>
+          <p><strong>Today, we carry that legacy forward.</strong></p>
+          <p>Mike22 is built on that same promise — to be there when you need support, to respond, and to help turn ideas into reality.</p>
+          <p>From Saudi Arabia to the world, we aim to support individuals and businesses by building solutions that make a real difference.</p>
+          <p>This is more than a name. <strong>It's a legacy of showing up, helping others, and creating impact.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISSION -->
+    <div class="mission-section">
+      <div class="mission-inner">
+        <span class="section-label">// Our promise</span>
+        <div class="mission-quote">
+          "PRESS THE BUTTON.<br>WE <span class="accent">ANSWER.</span>"
+        </div>
+        <p class="mission-sub">From Saudi Arabia &nbsp;·&nbsp; For the world</p>
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="team-section">
+      <span class="section-label">// The team</span>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-initials">MO.</div>
+          <div class="team-name">Mohammed Al-Alian</div>
+          <div class="team-role">Co-Founder</div>
+          <p class="team-bio">18+ years in sports business, sponsorship, and commercial strategy across major regional projects in the Middle East. Building software that solves real problems.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-initials">SU.</div>
+          <div class="team-name">Sultan Al-Alian</div>
+          <div class="team-role">Co-Founder</div>
+          <p class="team-bio">Co-building Mike22 alongside Mo — carrying forward a shared legacy of showing up, delivering results, and creating impact for people and businesses worldwide.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="bottombar">
+    <span class="bottom-left">© 2026 MIKE22 VENTURES</span>
+    <span class="bottom-right">
+      <a href="/privacy-policy">Privacy Policy</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:mo@mike22.com">mo@mike22.com</a>
+    </span>
+  </footer>
+
+</div>
+
+</body>
+</html>

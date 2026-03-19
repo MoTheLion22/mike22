@@ -27,7 +27,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#050608">
 <!-- 7-Segment Display Font -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dseg@0.46.0/css/dseg.min.css">
+<style>
+@font-face {
+  font-family: 'DSEG7';
+  src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -304,7 +312,7 @@
   }
 
   .stat-value {
-    font-family: 'DSEG7 Classic', monospace;
+    font-family: 'DSEG7', monospace;
     font-size: 28px;
     color: var(--accent);
     text-shadow: 0 0 10px var(--accent-glow);
@@ -312,7 +320,7 @@
   }
 
   .dseg7 {
-    font-family: 'DSEG7 Classic', 'DSEG7Classic-Regular', monospace !important;
+    font-family: 'DSEG7', monospace !important;
   }
 
   .stat-label {

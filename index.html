@@ -20,6 +20,14 @@
 <meta name="twitter:description" content="Web-based SaaS tools for businesses worldwide. Built in Jeddah, Saudi Arabia.">
 <meta name="twitter:image" content="https://www.mike22.com/og-image.png">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-title" content="Mike22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050608">
+<!-- 7-Segment Display Font -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dseg@0.46.0/css/dseg.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -296,9 +304,15 @@
   }
 
   .stat-value {
-    font-family: var(--mono);
-    font-size: 22px;
+    font-family: 'DSEG7 Classic', monospace;
+    font-size: 28px;
     color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+    letter-spacing: 0.05em;
+  }
+
+  .dseg7 {
+    font-family: 'DSEG7 Classic', 'DSEG7Classic-Regular', monospace !important;
   }
 
   .stat-label {
@@ -472,17 +486,17 @@
 
     <div class="stats">
       <div class="stat">
-        <span class="stat-value">2</span>
+        <span class="stat-value dseg7">2</span>
         <span class="stat-label">Products</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat">
-        <span class="stat-value">22</span>
+        <span class="stat-value dseg7">22</span>
         <span class="stat-label">Days Trial</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat">
-        <span class="stat-value">∞</span>
+        <span class="stat-value dseg7">8</span>
         <span class="stat-label">Industries</span>
       </div>
     </div>

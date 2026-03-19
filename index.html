@@ -179,9 +179,12 @@
     animation: fadeUp 0.8s ease forwards 0.7s;
   }
 
-  .hero-title .accent-22 {
-    color: var(--accent);
-    text-shadow: 0 0 40px var(--accent-glow), 0 0 80px rgba(0,229,255,0.1);
+  .hero-22-seg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 12px rgba(0,229,255,0.5));
   }
 
   .hero-sub {
@@ -468,7 +471,7 @@
   <main class="main">
     <p class="signal-label">MIKE — <span>M·I·K·E</span> — UNIT 22 — ONLINE</p>
 
-    <h1 class="hero-title">MIKE<span class="accent-22">22</span></h1>
+    <h1 class="hero-title">MIKE<canvas id="hero22" class="hero-22-seg" width="260" height="200"></canvas></h1>
     <p class="hero-sub">Software. Built to deliver.</p>
 
     <p class="tagline">
@@ -520,87 +523,115 @@ function draw7Seg(canvas, value) {
   ctx.clearRect(0, 0, W, H);
 
   const ON = '#00e5ff';
-  const OFF = '#0a2a2e';
-  const GLOW = 'rgba(0,229,255,0.4)';
+  const OFF = '#0d2a2e';
 
-  // Segments for each digit: a,b,c,d,e,f,g
   const segs = {
-    '0': [1,1,1,1,1,1,0],
-    '1': [0,1,1,0,0,0,0],
-    '2': [1,1,0,1,1,0,1],
-    '3': [1,1,1,1,0,0,1],
-    '4': [0,1,1,0,0,1,1],
-    '5': [1,0,1,1,0,1,1],
-    '6': [1,0,1,1,1,1,1],
-    '7': [1,1,1,0,0,0,0],
-    '8': [1,1,1,1,1,1,1],
-    '9': [1,1,1,1,0,1,1],
+    '0':[1,1,1,1,1,1,0],
+    '1':[0,1,1,0,0,0,0],
+    '2':[1,1,0,1,1,0,1],
+    '3':[1,1,1,1,0,0,1],
+    '4':[0,1,1,0,0,1,1],
+    '5':[1,0,1,1,0,1,1],
+    '6':[1,0,1,1,1,1,1],
+    '7':[1,1,1,0,0,0,0],
+    '8':[1,1,1,1,1,1,1],
+    '9':[1,1,1,1,0,1,1],
   };
 
-  function drawDigit(x, dw, dh) {
-    const t = dw * 0.12; // thickness
-    const g = dw * 0.06; // gap
-    const r = t / 2;
-
-    function seg(active, points) {
-      ctx.beginPath();
-      ctx.strokeStyle = active ? ON : OFF;
-      ctx.lineWidth = t;
-      ctx.lineCap = 'round';
-      ctx.shadowColor = active ? GLOW : 'transparent';
-      ctx.shadowBlur = active ? 8 : 0;
-      ctx.moveTo(points[0], points[1]);
-      ctx.lineTo(points[2], points[3]);
-      ctx.stroke();
+  function poly(points, color) {
+    ctx.beginPath();
+    ctx.moveTo(points[0], points[1]);
+    for (let i = 2; i < points.length; i += 2) ctx.lineTo(points[i], points[i+1]);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    if (color === ON) {
+      ctx.shadowColor = 'rgba(0,229,255,0.6)';
+      ctx.shadowBlur = 6;
+    } else {
+      ctx.shadowBlur = 0;
     }
+    ctx.fill();
+  }
+
+  function drawDigit(ox, dw, dh) {
+    const t = dw * 0.22;  // segment thickness
+    const k = t * 0.4;    // inset for trapezoid
+    const g = t * 0.1;   // gap between segments
+    const mh = dh / 2;    // middle height
 
     return function(s) {
-      // a - top
-      seg(s[0], [x+g+t/2, g+t/2, x+dw-g-t/2, g+t/2]);
-      // b - top right
-      seg(s[1], [x+dw-g-t/2, g+t/2, x+dw-g-t/2, dh/2]);
-      // c - bot right
-      seg(s[2], [x+dw-g-t/2, dh/2, x+dw-g-t/2, dh-g-t/2]);
-      // d - bottom
-      seg(s[3], [x+g+t/2, dh-g-t/2, x+dw-g-t/2, dh-g-t/2]);
-      // e - bot left
-      seg(s[4], [x+g+t/2, dh/2, x+g+t/2, dh-g-t/2]);
-      // f - top left
-      seg(s[5], [x+g+t/2, g+t/2, x+g+t/2, dh/2]);
-      // g - middle
-      seg(s[6], [x+g+t/2, dh/2, x+dw-g-t/2, dh/2]);
+      const c = (i) => s[i] ? ON : OFF;
+      // a - top horizontal
+      poly([ox+t+g,g,  ox+dw-t-g,g,  ox+dw-t-g+k,g+t,  ox+t+g-k,g+t], c(0));
+      // b - top-right vertical
+      poly([ox+dw-t,t+g,  ox+dw,t+g-k,  ox+dw,mh-g+k,  ox+dw-t,mh-g], c(1));
+      // c - bot-right vertical
+      poly([ox+dw-t,mh+g,  ox+dw,mh+g-k,  ox+dw,dh-t-g+k,  ox+dw-t,dh-t-g], c(2));
+      // d - bottom horizontal
+      poly([ox+t+g,dh-t,  ox+dw-t-g,dh-t,  ox+dw-t-g+k,dh,  ox+t+g-k,dh], c(3));
+      // e - bot-left vertical
+      poly([ox,mh+g-k,  ox+t,mh+g,  ox+t,dh-t-g,  ox,dh-t-g+k], c(4));
+      // f - top-left vertical
+      poly([ox,t+g-k,  ox+t,t+g,  ox+t,mh-g,  ox,mh-g+k], c(5));
+      // g - middle horizontal
+      poly([ox+t+g,mh-t/2,  ox+dw-t-g,mh-t/2,  ox+dw-t-g+k,mh,  ox+dw-t-g,mh+t/2,  ox+t+g,mh+t/2,  ox+t+g-k,mh], c(6));
     };
   }
 
-  const str = String(value);
-  const dh = H;
-  const dw = Math.floor((W - (str.length - 1) * 8) / str.length);
-
-  if (str === '∞') {
-    // Draw infinity as two loops
-    ctx.strokeStyle = ON;
-    ctx.lineWidth = 5;
-    ctx.shadowColor = GLOW;
-    ctx.shadowBlur = 8;
-    ctx.font = 'bold 52px serif';
+  if (value === '∞') {
+    ctx.font = `bold ${H*0.7}px serif`;
     ctx.fillStyle = ON;
+    ctx.shadowColor = 'rgba(0,229,255,0.6)';
+    ctx.shadowBlur = 8;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('∞', W/2, H/2);
     return;
   }
 
+  const str = String(value);
+  const gap = 6;
+  const dw = Math.floor((W - gap * (str.length - 1)) / str.length);
+  const dh = H;
+
   for (let i = 0; i < str.length; i++) {
-    const digit = str[i];
-    const x = i * (dw + 8);
-    const draw = drawDigit(x, dw, dh);
-    draw(segs[digit] || [0,0,0,0,0,0,0]);
+    const ox = i * (dw + gap);
+    const draw = drawDigit(ox, dw, dh);
+    draw(segs[str[i]] || [0,0,0,0,0,0,0]);
   }
 }
 
 window.addEventListener('load', () => {
   document.querySelectorAll('.seg-display').forEach(canvas => {
     draw7Seg(canvas, canvas.dataset.value);
+  });
+  // Draw big hero 22 — match font size
+  const hero = document.getElementById('hero22');
+  if (hero) {
+    const title = hero.closest('.hero-title');
+    const fontSize = parseFloat(window.getComputedStyle(title).fontSize);
+    const h = Math.round(fontSize * 0.72);
+    const w = Math.round(h * 1.1); // two digits side by side
+    hero.width = w;
+    hero.height = h;
+    hero.style.width = w + 'px';
+    hero.style.height = h + 'px';
+    draw7Seg(hero, '22');
+  }
+
+  window.addEventListener('resize', () => {
+    const h2 = document.getElementById('hero22');
+    if (h2) {
+      const title = h2.closest('.hero-title');
+      const fontSize = parseFloat(window.getComputedStyle(title).fontSize);
+      const hh = Math.round(fontSize * 0.72);
+      const ww = Math.round(hh * 1.1);
+      h2.width = ww;
+      h2.height = hh;
+      h2.style.width = ww + 'px';
+      h2.style.height = hh + 'px';
+      draw7Seg(h2, '22');
+    }
   });
 });
 </script>

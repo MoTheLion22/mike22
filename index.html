@@ -431,6 +431,44 @@
     .form-wrap button { border-radius: 0 0 2px 2px; }
     .status-pill { display: none; }
   }
+
+  /* PRODUCTS */
+  .products-wrap{width:100%;max-width:600px;margin-bottom:52px;text-align:left}
+  .products-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:8px}
+  .products-title{font-family:var(--display);font-size:clamp(22px,3vw,36px);color:var(--text);margin-bottom:18px}
+  .product-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:20px 24px;display:flex;align-items:center;gap:18px;text-decoration:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .product-card:hover{border-color:rgba(0,229,255,0.4);box-shadow:0 0 24px rgba(0,229,255,0.06)}
+  .product-icon{width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 0 16px rgba(37,99,235,0.3)}
+  .product-name{font-family:var(--display);font-size:22px;color:var(--text);line-height:1;margin-bottom:3px}
+  .product-tag{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px}
+  .product-desc{font-size:13px;color:rgba(232,234,240,0.6);line-height:1.5;font-weight:300}
+  .product-live{font-family:var(--mono);font-size:10px;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:3px 10px;border-radius:2px;letter-spacing:0.2em;flex-shrink:0}
+  .product-arrow{font-family:var(--mono);font-size:16px;color:var(--accent);flex-shrink:0;transition:transform 0.2s}
+  .product-card:hover .product-arrow{transform:translateX(4px)}
+  .products-more{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.15em;margin-top:10px}
+  @media(max-width:600px){
+    .product-card{flex-wrap:wrap;gap:12px}
+    .product-live,.product-arrow{flex-shrink:0}
+  }
+
+  /* PRODUCTS */
+  .products-wrap{width:100%;max-width:600px;margin-bottom:52px;text-align:left}
+  .products-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:8px}
+  .products-title{font-family:var(--display);font-size:clamp(22px,3vw,36px);color:var(--text);margin-bottom:18px}
+  .product-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:20px 24px;display:flex;align-items:center;gap:18px;text-decoration:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .product-card:hover{border-color:rgba(0,229,255,0.4);box-shadow:0 0 24px rgba(0,229,255,0.06)}
+  .product-icon{width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 0 16px rgba(37,99,235,0.3)}
+  .product-name{font-family:var(--display);font-size:22px;color:var(--text);line-height:1;margin-bottom:3px}
+  .product-tag{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px}
+  .product-desc{font-size:13px;color:rgba(232,234,240,0.6);line-height:1.5;font-weight:300}
+  .product-live{font-family:var(--mono);font-size:10px;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:3px 10px;border-radius:2px;letter-spacing:0.2em;flex-shrink:0}
+  .product-arrow{font-family:var(--mono);font-size:16px;color:var(--accent);flex-shrink:0;transition:transform 0.2s}
+  .product-card:hover .product-arrow{transform:translateX(4px)}
+  .products-more{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.15em;margin-top:10px}
+  @media(max-width:600px){
+    .product-card{flex-wrap:wrap;gap:12px}
+    .product-live,.product-arrow{flex-shrink:0}
+  }
 </style>
 </head>
 <body>
@@ -447,6 +485,7 @@
       MIKE22.COM
     </div>
     <nav>
+          <a href="/faiga/">Products</a>
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
@@ -475,8 +514,25 @@
     <p class="hero-sub">Software. Built to deliver.</p>
 
     <p class="tagline">
-      Something big is coming. <strong>We're building tools that change how the world works</strong> — and we're just getting started.
+      The journey has begun. <strong>FAIGA22 is our first product</strong> — and this is only the start. More tools are coming.
     </p>
+
+    <!-- OUR PRODUCTS -->
+    <div class="products-wrap" style="opacity:0;animation:fadeUp 0.6s ease forwards 1.2s">
+      <p class="products-label">// Our products</p>
+      <h2 class="products-title">WHAT WE SHIP</h2>
+      <a href="/faiga/" class="product-card">
+        <div class="product-icon">&#128278;</div>
+        <div style="flex:1">
+          <div class="product-name">FAIGA22</div>
+          <div class="product-tag">Personal link collection</div>
+          <div class="product-desc">Save links from YouTube, Instagram, TikTok and anywhere. Organised by category. Always with you.</div>
+        </div>
+        <span class="product-live">&#11044; LIVE</span>
+        <div class="product-arrow">&#8594;</div>
+      </a>
+      <p class="products-more">// More products coming soon</p>
+    </div>
 
     <div class="form-wrap">
       <input type="email" id="emailInput" placeholder="Enter your email for early access" />

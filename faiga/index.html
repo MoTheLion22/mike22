@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faiga — MIKE22</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.mike22.com/faiga">
+<meta property="og:title" content="Faiga — Your personal link collection">
+<meta property="og:description" content="Save links from YouTube, Instagram, TikTok and anywhere else. Organised your way. Built by MIKE22.">
+<meta property="og:image" content="https://www.mike22.com/og-image.png">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#050608;--dark:#0a0c10;--panel:#0f1117;--border:#1e2330;
+  --accent:#00e5ff;--accent-dim:rgba(0,229,255,0.08);--accent-glow:rgba(0,229,255,0.25);
+  --blue:#2563EB;--text:#e8eaf0;--muted:#4a5168;
+  --mono:"Share Tech Mono",monospace;--display:"Bebas Neue",sans-serif;--body:"DM Sans",sans-serif;
+}
+html,body{background:var(--black);color:var(--text);font-family:var(--body);overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+.bg-glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,229,255,0.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+.scanline{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:2}
+.page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-bottom:1px solid var(--border);animation:fadeDown 0.6s ease forwards}
+.logo{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:0.1em;display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);animation:pulse 2s ease-in-out infinite}
+nav{display:flex;gap:32px;align-items:center}
+nav a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s}
+nav a:hover{color:var(--accent)}
+.status-pill{font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(0,229,255,0.2);padding:6px 14px;border-radius:2px;letter-spacing:0.15em;text-transform:uppercase}
+
+/* TICKER */
+.ticker{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;background:var(--panel)}
+.ticker-inner{display:flex;gap:80px;white-space:nowrap;animation:ticker 20s linear infinite;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.15em}
+.ticker-inner span{color:var(--accent);margin-right:8px}
+
+/* HERO */
+.hero{padding:80px 48px 60px;text-align:center;animation:fadeUp 0.8s ease forwards}
+.breadcrumb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color 0.2s}
+.breadcrumb a:hover{color:var(--accent)}
+.breadcrumb span{color:var(--accent);margin:0 8px}
+.app-icon{width:96px;height:96px;border-radius:24px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 24px;box-shadow:0 0 40px rgba(37,99,235,0.4)}
+.live-badge{display:inline-block;font-family:var(--mono);font-size:11px;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:4px 14px;border-radius:2px;letter-spacing:0.2em;margin-bottom:16px}
+.hero h1{font-family:var(--display);font-size:clamp(56px,10vw,120px);line-height:0.9;color:var(--text);margin-bottom:8px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
+.hero-desc{font-size:18px;font-weight:300;color:rgba(232,234,240,0.7);max-width:560px;margin:0 auto 40px;line-height:1.7}
+.hero-desc strong{color:var(--text);font-weight:500}
+.cta-btn{display:inline-block;background:var(--accent);color:var(--black);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:16px 36px;text-decoration:none;border-radius:2px;transition:opacity 0.2s,box-shadow 0.2s}
+.cta-btn:hover{opacity:0.9;box-shadow:0 0 30px var(--accent-glow)}
+.cta-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px;letter-spacing:0.1em}
+
+/* FEATURES */
+.section{padding:60px 48px;max-width:900px;margin:0 auto;width:100%}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-family:var(--display);font-size:clamp(32px,5vw,56px);color:var(--text);margin-bottom:40px}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.feature-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:24px;transition:border-color 0.2s}
+.feature-card:hover{border-color:rgba(0,229,255,0.3)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px}
+.feature-desc{font-size:14px;color:rgba(232,234,240,0.6);line-height:1.6;font-weight:300}
+
+/* SCREENSHOTS */
+.screens{padding:60px 48px;background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.screens-inner{max-width:900px;margin:0 auto}
+.screens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:40px}
+.screen-card{background:var(--black);border:1px solid var(--border);border-radius:4px;padding:20px;font-family:var(--mono);font-size:11px}
+.screen-label{color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px}
+.screen-mock{background:var(--panel);border-radius:2px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.mock-header{height:10px;background:var(--border);border-radius:1px;width:60%}
+.mock-card{height:48px;background:var(--border);border-radius:2px;opacity:0.6}
+.mock-card-blue{height:48px;background:rgba(37,99,235,0.3);border-radius:2px;border:1px solid rgba(37,99,235,0.4)}
+.mock-badge{height:8px;width:40%;background:rgba(0,229,255,0.2);border-radius:1px}
+
+/* STATS BAR */
+.stats-bar{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);max-width:100%}
+.stat-item{flex:1;padding:32px 24px;text-align:center;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:var(--display);font-size:48px;color:var(--accent);line-height:1;text-shadow:0 0 20px var(--accent-glow)}
+.stat-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:6px}
+
+/* FOOTER */
+.bottombar{padding:20px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.bottom-left{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.1em}
+.bottom-right{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.bottom-right a{color:var(--muted);text-decoration:none;transition:color 0.2s}
+.bottom-right a:hover{color:var(--accent)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--accent)}50%{opacity:0.4;box-shadow:0 0 4px var(--accent)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+@media(max-width:600px){
+  .topbar,.bottombar{padding:20px 24px}
+  .hero{padding:48px 24px 40px}
+  .section{padding:40px 24px}
+  .screens{padding:40px 24px}
+  .stats-bar{flex-direction:column}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border)}
+  .stat-item:last-child{border-bottom:none}
+  .status-pill{display:none}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="scanline"></div>
+<div class="page">
+
+  <header class="topbar">
+    <a href="/" class="logo"><div class="logo-dot"></div>MIKE22.COM</a>
+    <nav>
+      <a href="/faiga/">Products</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="status-pill">⬤ &nbsp;Live</div>
+  </header>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>//</span> FAIGA22 &nbsp;&nbsp;&nbsp; <span>—</span> LINK COLLECTION &nbsp;&nbsp;&nbsp; <span>•</span> SAVE FROM ANYWHERE &nbsp;&nbsp;&nbsp; <span>//</span> BUILT BY MIKE22 &nbsp;&nbsp;&nbsp; <span>—</span> JEDDAH, SA &nbsp;&nbsp;&nbsp; <span>•</span> FAIGA22 &nbsp;&nbsp;&nbsp; <span>—</span> LINK COLLECTION &nbsp;&nbsp;&nbsp; <span>•</span> SAVE FROM ANYWHERE &nbsp;&nbsp;&nbsp; <span>//</span> BUILT BY MIKE22 &nbsp;&nbsp;&nbsp;
+    </div>
+  </div>
+
+  <div class="hero">
+    <p class="breadcrumb"><a href="/">MIKE22</a><span>›</span>PRODUCTS</p>
+    <div class="app-icon">🔖</div>
+    <p class="live-badge">⬤ &nbsp;LIVE NOW</p>
+    <h1>FAIGA<span>22</span></h1>
+    <p class="hero-sub">Your personal link collection</p>
+    <p class="hero-desc">
+      Stop losing links in your DMs and browser tabs.
+      <strong>Faiga saves everything in one place</strong> —
+      YouTube videos, Instagram reels, TikTok clips, articles, shops — organised your way.
+    </p>
+    <a href="https://faiga-lilac.vercel.app" target="_blank" class="cta-btn">Open Faiga22 →</a>
+    <p class="cta-sub">Free to use &nbsp;·&nbsp; No card needed &nbsp;·&nbsp; Save up to 22 links</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">14</div><div class="stat-lbl">Categories</div></div>
+    <div class="stat-item"><div class="stat-num">22</div><div class="stat-lbl">Free Links</div></div>
+    <div class="stat-item"><div class="stat-num">9</div><div class="stat-lbl">Platforms</div></div>
+    <div class="stat-item"><div class="stat-num">∞</div><div class="stat-lbl">Pro Plan</div></div>
+  </div>
+
+  <!-- What is Faiga -->
+  <div class="section">
+    <p class="section-label">// What is it</p>
+    <h2 class="section-title">Built for how you actually browse</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Paste any link</div>
+        <div class="feature-desc">YouTube, TikTok, Instagram, X, Pinterest, WhatsApp, or any website. Faiga detects the platform automatically.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🖼️</div>
+        <div class="feature-title">Auto metadata</div>
+        <div class="feature-desc">Title, thumbnail, and author are fetched automatically. No copy-pasting. Just paste the link and go.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📂</div>
+        <div class="feature-title">14 categories</div>
+        <div class="feature-desc">AI, Anime, Business, Cooking, Crochet, Entertainment, Fashion, Fitness, Gaming, Motivation, News, Shopping, Travel, Other.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-title">Star and filter</div>
+        <div class="feature-desc">Star your favourites, filter by platform or category, search by title. Find any link in seconds.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <div class="feature-title">Dark mode</div>
+        <div class="feature-desc">Full dark mode that persists across sessions. Clean, distraction-free interface on any device.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📤</div>
+        <div class="feature-title">Export and share</div>
+        <div class="feature-desc">Select links by category and export as a clean HTML file with clickable links. Share via WhatsApp, email, or anywhere.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Install as app</div>
+        <div class="feature-desc">Add Faiga22 to your home screen on iPhone or Android. Works like a native app — no App Store needed.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎁</div>
+        <div class="feature-title">Referral rewards</div>
+        <div class="feature-desc">Share your unique referral link. Invite 22 friends and unlock a surprise gift. Every user gets their own link.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screens mockups -->
+  <div class="screens">
+    <div class="screens-inner">
+      <p class="section-label">// How it looks</p>
+      <h2 class="section-title">Clean. Fast. Yours.</h2>
+      <div class="screens-grid">
+        <div class="screen-card">
+          <div class="screen-label">// Save a link</div>
+          <div class="screen-mock">
+            <div style="height:80px;background:rgba(37,99,235,0.15);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:24px">🎬</div>
+            <div style="height:8px;background:var(--border);border-radius:1px;width:80%"></div>
+            <div style="height:6px;background:var(--border);border-radius:1px;width:50%;opacity:0.5"></div>
+            <div style="height:6px;background:rgba(0,229,255,0.2);border-radius:1px;width:40%"></div>
+            <div style="height:36px;background:rgba(37,99,235,0.4);border-radius:2px;margin-top:4px"></div>
+          </div>
+        </div>
+        <div class="screen-card">
+          <div class="screen-label">// My links</div>
+          <div class="screen-mock">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <div style="height:6px;background:var(--border);border-radius:1px;width:30%"></div>
+              <div style="display:flex;gap:4px">
+                <div style="width:14px;height:14px;background:rgba(0,229,255,0.2);border-radius:1px"></div>
+                <div style="width:14px;height:14px;background:rgba(0,229,255,0.2);border-radius:1px"></div>
+              </div>
+            </div>
+            <div style="height:60px;background:var(--border);border-radius:2px;opacity:0.7"></div>
+            <div style="height:60px;background:var(--border);border-radius:2px;opacity:0.5"></div>
+            <div style="height:60px;background:var(--border);border-radius:2px;opacity:0.3"></div>
+          </div>
+        </div>
+        <div class="screen-card">
+          <div class="screen-label">// Profile</div>
+          <div class="screen-mock">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(37,99,235,0.4);flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="height:8px;background:var(--border);border-radius:1px;width:60%;margin-bottom:4px"></div>
+                <div style="height:6px;background:var(--border);border-radius:1px;width:40%;opacity:0.5"></div>
+              </div>
+            </div>
+            <div style="height:28px;background:rgba(37,99,235,0.15);border-radius:2px;border:1px solid rgba(37,99,235,0.3)"></div>
+            <div style="height:28px;background:var(--border);border-radius:2px;opacity:0.4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div style="padding:80px 48px;text-align:center">
+    <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:16px">// Ready to start</p>
+    <h2 style="font-family:var(--display);font-size:clamp(40px,6vw,80px);color:var(--text);margin-bottom:24px">START SAVING TODAY</h2>
+    <p style="font-size:16px;font-weight:300;color:rgba(232,234,240,0.6);max-width:400px;margin:0 auto 36px;line-height:1.7">Free to use. No credit card. Save up to 22 links on the free plan.</p>
+    <a href="https://faiga-lilac.vercel.app" target="_blank" class="cta-btn">Launch Faiga22 →</a>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:0.1em">Built by MIKE22 VENTURES · Jeddah, SA · 2026</p>
+  </div>
+
+  <footer class="bottombar">
+    <span class="bottom-left">© 2026 MIKE22 VENTURES</span>
+    <span class="bottom-right">
+      <a href="/">Home</a> &nbsp;·&nbsp;
+      <a href="/privacy-policy">Privacy Policy</a>
+    </span>
+  </footer>
+</div>
+</body>
+</html>
